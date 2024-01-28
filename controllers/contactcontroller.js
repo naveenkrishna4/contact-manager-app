@@ -1,11 +1,13 @@
 const asyncHandler = require("express-async-handler");
+const contact = require("../models/contactmodel");
 
 //@desc Get all contacts
 //@access public
 //route GET api/contacts
 
 const getcontact = asyncHandler(async (req, res) => {
-  res.status(200).json({ msg: "Get all contacts" });
+  const contacts = await contact.find();
+  res.status(200).json(contacts);
 });
 
 //@desc Get one contact
@@ -22,12 +24,17 @@ const getonecontact = asyncHandler(async (req, res) => {
 
 const createcontact = asyncHandler(async (req, res) => {
   console.log(req.body);
-  const { name, email, phone } = req.body;
-  if (!name || !email || !phone) {
+  const { name, email, phno } = req.body;
+  if (!name || !email || !phno) {
     res.status(400);
     throw new Error("All fields are mandatory.");
   }
-  res.status(202).json({ msg: "Create contact" });
+  const con = await contact.create({
+    name,
+    email,
+    phno,
+  });
+  res.status(202).json(con);
 });
 
 //@desc Update contact

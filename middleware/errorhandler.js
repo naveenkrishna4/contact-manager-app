@@ -2,35 +2,35 @@ const { constants } = require("../constants");
 const error = (err, req, res, next) => {
   const status = res.status ? res.status : 500;
   switch (status) {
-    case VALIDATION_ERR:
+    case constants.VALIDATION_ERR:
       res.json({
         tilte: "Validation Error",
         mesaage: err.message,
         stackTrace: err.stack,
       });
       break;
-    case NOT_FOUND:
+    case constants.NOT_FOUND:
       res.json({
         tilte: "File Not Found Error",
         mesaage: err.message,
         stackTrace: err.stack,
       });
       break;
-    case FORBIDDEN:
+    case constants.FORBIDDEN:
       res.json({
         tilte: "Forbidden Error",
         mesaage: err.message,
         stackTrace: err.stack,
       });
       break;
-    case UNAUTHORIZED:
+    case constants.UNAUTHORIZED:
       res.json({
         tilte: "Unauthorized Error",
         mesaage: err.message,
         stackTrace: err.stack,
       });
       break;
-    case SERVER_ERR:
+    case constants.SERVER_ERR:
       res.json({
         tilte: "Server Error",
         mesaage: err.message,

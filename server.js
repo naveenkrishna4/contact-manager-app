@@ -9,7 +9,9 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(express.json());
+app.use(express.Router());
 app.use("/api/contacts", require("./routes/contactroutes"));
+app.use("/api/users", require("./routes/userroutes"));
 app.use(error);
 
 app.listen(port, () => {

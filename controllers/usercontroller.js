@@ -51,7 +51,7 @@ const loginUser = asyncHandler(async (req, res) => {
         },
       },
       process.env.JWT_ACCESS_TOKEN,
-      { expiresIn: "1m" }
+      { expiresIn: "100m" }
     );
     res.status(200).json({ accesstoken });
   } else {

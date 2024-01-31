@@ -1,5 +1,6 @@
 const exp = require("express");
 const router = exp.Router();
+const validateToken = require("../middleware/validatetoken");
 const {
   getcontact,
   getonecontact,
@@ -8,8 +9,8 @@ const {
   createcontact,
 } = require("../controllers/contactcontroller.js");
 
+router.use(validateToken);
 router.route("/").get(getcontact).post(createcontact);
-
 router
   .route("/:id")
   .get(getonecontact)

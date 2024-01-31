@@ -2,16 +2,16 @@ const asyncHandler = require("express-async-handler");
 const contact = require("../models/contactmodel");
 
 //@desc Get all contacts
-//@access public
+//@access private
 //route GET api/contacts
 
 const getcontact = asyncHandler(async (req, res) => {
-  const contacts = await contact.find();
+  const contacts = await contact.find({ user_id: req.user.id });
   res.status(200).json(contacts);
 });
 
 //@desc Get one contact
-//@access public
+//@access private
 //route GET api/contacts/:id
 
 const getonecontact = asyncHandler(async (req, res) => {
@@ -24,7 +24,7 @@ const getonecontact = asyncHandler(async (req, res) => {
 });
 
 //@desc Create new contact
-//@access public
+//@access private
 //route POST api/contacts
 
 const createcontact = asyncHandler(async (req, res) => {
@@ -38,12 +38,13 @@ const createcontact = asyncHandler(async (req, res) => {
     name,
     email,
     phno,
+    user_id: req.user.id,
   });
   res.status(202).json(con);
 });
 
 //@desc Update contact
-//@access public
+//@access private
 //route PUT api/contacts/:id
 
 const updatecontact = asyncHandler(async (req, res) => {
@@ -51,6 +52,10 @@ const updatecontact = asyncHandler(async (req, res) => {
   if (!contacts) {
     res.status(404);
     throw new Error("Id Not found");
+  }
+  if (contacts.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error("User don't have permission ");
   }
   const updatedContact = await contact.findByIdAndUpdate(
     req.params.id,
@@ -61,15 +66,20 @@ const updatecontact = asyncHandler(async (req, res) => {
 });
 
 //@desc Delete contact
-//@access public
+//@access private
 //route DELETE api/contacts/:id
 
 const deletecontact = asyncHandler(async (req, res) => {
-  const contacts = await contact.findByIdAndDelete(req.params.id);
+  const contacts = await contact.findById(req.params.id);
   if (!contacts) {
     res.status(404);
     throw new Error("Id Not found");
   }
+  if (contacts.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error("User don't have permission ");
+  }
+  await contact.deleteOne({ contacts });
   res.status(200).json(contacts);
 });
 
